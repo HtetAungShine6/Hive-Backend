@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
 // User Schema
 const userSchema = new mongoose.Schema({
@@ -23,20 +23,20 @@ const userSchema = new mongoose.Schema({
   },
   profileImageUrl: {
     type: String,
-    default: "",
+    default: '',
   },
   about: {
     type: String,
-    default: "",
+    default: '',
   },
   bio: {
     type: String,
-    default: "",
+    default: '',
   },
   instagramLink: {
-    type: String, 
+    type: String,
     required: true,
-    default: "",
+    default: '',
   },
   isOrganizer: {
     type: Boolean,
@@ -45,14 +45,14 @@ const userSchema = new mongoose.Schema({
   isSuspened: {
     type: Boolean,
     default: false,
-  }, 
+  },
   password: {
     type: String,
     required: true,
   },
-});
+})
 
 // Create User model
-const User = mongoose.models.User || mongoose.model("User", userSchema);
+const User = mongoose.models.User || mongoose.model('User', userSchema)
 
-export default User;
+export default User
