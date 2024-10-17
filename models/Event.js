@@ -1,17 +1,17 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
 // Event Schema
 const eventSchema = new mongoose.Schema({
   eventImageUrl: {
     type: String,
-    default: "",
+    default: '',
   },
   name: {
     type: String,
     required: true,
   },
   location: {
-    type: Date,
+    type: String,
     required: true,
   },
   startDate: {
@@ -44,7 +44,7 @@ const eventSchema = new mongoose.Schema({
   },
   additionalInfo: {
     type: String,
-    default: "",
+    default: '',
   },
   participants: {
     type: Array,
@@ -54,9 +54,9 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-});
+})
 
 // Create Event model
-const Event = mongoose.models.Event || mongoose.model("Event", eventSchema);
+const Event = mongoose.models.Event || mongoose.model('Event', eventSchema)
 
-export default Event;
+export default Event

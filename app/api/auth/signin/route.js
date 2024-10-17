@@ -13,8 +13,8 @@ export async function POST(request) {
 
     if (!user) {
       return NextResponse.json({
-        message: 'User does not exist',
         success: false,
+        message: 'User does not exist',
       })
     }
 
@@ -22,8 +22,8 @@ export async function POST(request) {
 
     if (!isCorrect) {
       return NextResponse.json({
-        message: 'Invalid credentials',
         success: false,
+        message: 'Invalid credentials',
       })
     }
 
@@ -32,12 +32,16 @@ export async function POST(request) {
     })
 
     return NextResponse.json({
-      message: 'User logged in successfully',
       success: true,
-      user: user,
-      token: token,
+      message: {
+        token,
+        user,
+      },
     })
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({
+      success: false,
+      message: error.message,
+    })
   }
 }
