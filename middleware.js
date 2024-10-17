@@ -38,5 +38,10 @@ export async function middleware(request) {
 
 // Define protected routes here
 export const config = {
-  matcher: ['/dashboard/:path*', '/user/:path*'], // Add paths that need protection
+  matcher: [
+    '/dashboard/:path*',
+    '/user/:path*',
+    '/events/:path*',
+    '/api/events/:path*',
+  ], // Add paths that need protection
 }
