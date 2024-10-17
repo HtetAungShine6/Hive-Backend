@@ -19,9 +19,9 @@ export async function POST(request) {
       isSuspened,
     } = await request.json()
 
-    const user = await User.findOne({ email })
+    const existingUser = await User.findOne({ email })
 
-    if (user) {
+    if (existingUser) {
       return NextResponse.json({
         success: false,
         message: 'User already exists',
@@ -45,11 +45,11 @@ export async function POST(request) {
       isSuspened,
     })
 
-    const savedUser = await newUser.save()
+    const user = await newUser.save()
 
     const token = jwt.sign(
       {
-        id: savedUser._id,
+        id: user._id,
       },
       process.env.JWT_SECRET,
       {
@@ -59,8 +59,10 @@ export async function POST(request) {
 
     return NextResponse.json({
       success: true,
-      message: savedUser,
-      token,
+      message: {
+        token,
+        user
+      }
     })
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message })
