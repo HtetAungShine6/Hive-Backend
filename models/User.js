@@ -35,7 +35,6 @@ const userSchema = new mongoose.Schema({
   },
   instagramLink: {
     type: String,
-    required: true,
     default: '',
   },
   isOrganizer: {
