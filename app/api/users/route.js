@@ -1,24 +1,19 @@
-import dbConnect from '@/libs/db';
-import User from '@/models/User'; 
-
-export async function GET(req, res) {
-  await dbConnect(); 
-    
+import User from '@/models/User'
+import { NextResponse } from 'next/server'
+export async function GET(req) {
   try {
-    const users = await User.find().select('-password');
+    const users = await User.find().select('-password')
 
     const response = {
-        success: true,
-        message: users,
-    };
+      success: true,
+      message: users,
+    }
 
-    return new Response(JSON.stringify(response), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return NextResponse.json({ success: true, message: users })
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Failed to fetch users' }), {
-      status: 500,
-    });
+    return NextResponse.json({
+      success: false,
+      message: 'Error retrieving users',
+    })
   }
 }

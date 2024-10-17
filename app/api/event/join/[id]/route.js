@@ -19,7 +19,7 @@ const verifyToken = (req) => {
   }
 }
 
-export async function GET(req, { params }) {
+export async function POST(req, { params }) {
   const decoded = verifyToken(req)
   if (!decoded) {
     return NextResponse.json({
@@ -27,7 +27,45 @@ export async function GET(req, { params }) {
       message: 'Unauthorized',
     })
   }
-
+  const { userid } = await req.json()
+  console.log('userid', userid)
   const { id } = params
-  return NextResponse.json({ eventid: id })
+
+  try {
+    const event = await Event.findById(id)
+    if (!event) {
+      return NextResponse.json({ success: false, message: 'Event not found' })
+    }
+    const user = await User.findById(userid)
+
+    if (!user) {
+      return NextResponse.json({ success: false, message: 'User not found' })
+    }
+
+    if (event.participants.includes(userid)) {
+      return NextResponse.json({
+        success: false,
+        message: 'User already joined',
+      })
+    }
+
+    event.participants.push({
+      userid: userid,
+      name: user.name,
+      profileImageUrl: user.profileImageUrl,
+      bio: user.bio,
+    })
+
+    await event.save()
+
+    return NextResponse.json({
+      success: true,
+      message: 'Join Successful',
+    })
+  } catch (error) {
+    return NextResponse.json({
+      success: false,
+      message: 'Error retrieving event',
+    })
+  }
 }
