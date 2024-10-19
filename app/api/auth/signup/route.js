@@ -1,7 +1,7 @@
 import User from '@/models/User.js'
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { NextResponse, NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
 export async function POST(request) {
   try {
@@ -19,6 +19,7 @@ export async function POST(request) {
       isSuspened,
     } = await request.json()
 
+    // Check if the user already exists
     const existingUser = await User.findOne({ email })
 
     if (existingUser) {
@@ -28,14 +29,16 @@ export async function POST(request) {
       })
     }
 
+    // Hash the password
     const salt = await bcryptjs.genSalt(10)
     const hashedPassword = await bcryptjs.hash(password, salt)
 
+    // Create a new user
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
-      dateOfBirth,
+      dateOfBirth: new Date(dateOfBirth),
       gender,
       profileImageUrl,
       about,
@@ -47,6 +50,7 @@ export async function POST(request) {
 
     const user = await newUser.save()
 
+    // Generate a JWT token
     const token = jwt.sign(
       {
         id: user._id,
@@ -57,11 +61,18 @@ export async function POST(request) {
       }
     )
 
+    // Format the date to "YYYY-MM-DD"
+    const formattedDateOfBirth = user.dateOfBirth.toISOString().split('T')[0]
+
+    // Return the response with token and user details
     return NextResponse.json({
       success: true,
       message: {
         token,
-        user
+        user: {
+          ...user.toObject(),
+          dateOfBirth: formattedDateOfBirth,  // formatted date
+        }
       }
     })
   } catch (error) {
