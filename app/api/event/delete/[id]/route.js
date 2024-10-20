@@ -1,6 +1,4 @@
-// Event delete
-
-import Event from '@model/Event.js'
+import Event from '@/model/Event.js'
 import { NextRequest, NextResponse } from 'next/server'
 
 import jwt from 'jsonwebtoken'

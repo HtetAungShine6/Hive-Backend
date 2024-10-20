@@ -1,4 +1,4 @@
-import Event from '@models/Event.js'
+import Event from '@/models/Event.js'
 import { NextRequest, NextResponse } from 'next/server'
 
 import jwt from 'jsonwebtoken'
@@ -18,7 +18,7 @@ const verifyToken = (req) => {
   }
 }
 
-export async function PUT(res) {
+export async function PUT(req, { params }) {
   const decoded = verifyToken(req)
   if (!decoded) {
     return NextResponse.json({
@@ -26,6 +26,8 @@ export async function PUT(res) {
       message: 'Unauthorized',
     })
   }
+
+  const { id } = params
   const {
     eventImageUrl,
     name,
@@ -59,7 +61,7 @@ export async function PUT(res) {
 
   try {
     const updatedEvent = await Event.findByIdAndUpdate(
-      req.params.id,
+      id,
       {
         eventImageUrl,
         name,
