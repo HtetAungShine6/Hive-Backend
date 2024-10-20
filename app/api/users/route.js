@@ -13,7 +13,7 @@ export async function GET(req) {
   } catch (error) {
     return NextResponse.json({
       success: false,
-      message: error,
+      error,
     })
   }
 }
