@@ -1,4 +1,5 @@
 import User from '@/models/User.js'
+import e from 'cors'
 import { NextResponse } from 'next/server'
 export async function GET(req) {
   try {
@@ -11,9 +12,6 @@ export async function GET(req) {
 
     return NextResponse.json({ success: true, message: users })
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      error,
-    })
+    return NextResponse.error(error)
   }
 }
