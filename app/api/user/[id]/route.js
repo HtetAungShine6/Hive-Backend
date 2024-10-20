@@ -11,7 +11,17 @@ export async function GET(req, { params }) {
       return NextResponse.json({ success: false, message: 'User not found' })
     }
 
-    return NextResponse.json({ success: true, message: user })
+    const formattedDateOfBirth = user.dateOfBirth
+      ? user.dateOfBirth.toISOString().split('T')[0]
+      : null;
+
+    return NextResponse.json({
+      success: true,
+      message: {
+        ...user.toObject(),
+        dateOfBirth: formattedDateOfBirth, 
+      },
+    })
   } catch (error) {
     return NextResponse.json({
       success: false,
