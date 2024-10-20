@@ -12,6 +12,6 @@ export async function GET(req) {
 
     return NextResponse.json({ success: true, message: users })
   } catch (error) {
-    return NextResponse.error(error)
+    return NextResponse.json(error)
   }
 }

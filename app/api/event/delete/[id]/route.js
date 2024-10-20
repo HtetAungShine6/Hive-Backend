@@ -1,5 +1,6 @@
-import User from '@/models/User'
-import Event from '@/models/Event'
+// Event delete
+
+import Event from '@model/Event.js'
 import { NextRequest, NextResponse } from 'next/server'
 
 import jwt from 'jsonwebtoken'
@@ -19,7 +20,7 @@ const verifyToken = (req) => {
   }
 }
 
-export async function POST(req, { params }) {
+export async function DELETE(req) {
   const decoded = verifyToken(req)
   if (!decoded) {
     return NextResponse.json({
@@ -27,38 +28,17 @@ export async function POST(req, { params }) {
       message: 'Unauthorized',
     })
   }
-  const { userid } = await req.json()
-  console.log('userid', userid)
-  const { id } = params
+  const { id } = req.params
 
   try {
     const event = await Event.findById(id)
     if (!event) {
       return NextResponse.json({ success: false, message: 'Event not found' })
     }
-    const user = await User.findById(userid)
 
-    if (!user) {
-      return NextResponse.json({ success: false, message: 'User not found' })
-    }
+    await event.delete()
 
-    if (!event.participants.includes(userid)) {
-      return NextResponse.json({
-        success: false,
-        message: 'User not joined',
-      })
-    }
-
-    event.participants = event.participants.filter(
-      (participant) => participant !== userid
-    )
-
-    await event.save()
-
-    return NextResponse.json({
-      success: true,
-      message: 'User unjoined',
-    })
+    return NextResponse.json({ success: true, message: 'Event deleted' })
   } catch (err) {
     return NextResponse.json({ success: false, message: err.message })
   }
