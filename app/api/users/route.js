@@ -23,7 +23,7 @@ export async function GET() {
   } catch (error) {
     return NextResponse.json({
       success: false,
-      message: 'Error retrieving users: ${error.message}',
-    })
+      message: error.message
+    }, { status: 500 });
   }
 }
