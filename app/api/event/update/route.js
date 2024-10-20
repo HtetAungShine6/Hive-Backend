@@ -1,4 +1,4 @@
-import Event from '@models/Event.js'
+import Event from '@models/Event'
 import { NextRequest, NextResponse } from 'next/server'
 
 import jwt from 'jsonwebtoken'
