@@ -26,6 +26,8 @@ export async function POST(req) {
       message: 'Unauthorized',
     })
   }
+
+  const userId = decoded.id;
   const {
     eventImageUrl,
     name,
@@ -48,8 +50,7 @@ export async function POST(req) {
     !endDate ||
     !startTime ||
     !endTime ||
-    !category ||
-    !organizer
+    !category
   ) {
     return NextResponse.json(
       { success: false, message: 'Please fill in all required fields' },
@@ -57,19 +58,22 @@ export async function POST(req) {
     )
   }
 
+  const startDateTime = new Date(`${startDate}T${startTime}:00`)
+  const endDateTime = new Date(`${endDate}T${endTime}:00`)
+
   const newEvent = new Event({
     eventImageUrl,
     name,
     location,
-    startDate,
-    endDate,
-    startTime,
-    endTime,
+    startDate: startDateTime,
+    endDate: endDateTime,
+    startTime: startDateTime,
+    endTime: endDateTime,
     maxParticipants,
     isLimited,
     category,
     additionalInfo,
-    organizer,
+    organizer: userId,
   })
 
   await newEvent.save()
