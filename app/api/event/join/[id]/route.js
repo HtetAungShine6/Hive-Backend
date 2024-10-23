@@ -27,8 +27,10 @@ export async function POST(req, { params }) {
       message: 'Unauthorized',
     })
   }
-  const { userid } = await req.json()
-  console.log('userid', userid)
+
+  const userId = decoded.id;
+  // const { userid } = await req.json()
+  // console.log('userid', userid)
   const { id } = params
 
   try {
@@ -36,13 +38,13 @@ export async function POST(req, { params }) {
     if (!event) {
       return NextResponse.json({ success: false, message: 'Event not found' })
     }
-    const user = await User.findById(userid)
+    const user = await User.findById(userId)
 
     if (!user) {
       return NextResponse.json({ success: false, message: 'User not found' })
     }
 
-    if (event.participants.includes(userid)) {
+    if (event.participants.includes(userId)) {
       return NextResponse.json({
         success: false,
         message: 'User already joined',
@@ -50,7 +52,7 @@ export async function POST(req, { params }) {
     }
 
     event.participants.push({
-      userid: userid,
+      userid: userId,
       name: user.name,
       profileImageUrl: user.profileImageUrl,
       bio: user.bio,
@@ -66,6 +68,6 @@ export async function POST(req, { params }) {
     return NextResponse.json({
       success: false,
       message: 'Error retrieving event',
-    })
+    }, { status: 500 })
   }
 }
