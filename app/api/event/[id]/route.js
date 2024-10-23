@@ -1,4 +1,5 @@
 import Event from '@/models/Event'
+import User from '@/models/User'
 import { NextResponse } from 'next/server'
 
 export async function GET(req, { params }) {
@@ -28,6 +29,32 @@ export async function GET(req, { params }) {
       ? event.endTime.toISOString().split('T')[1].split(':')[0] + ':' + event.endTime.toISOString().split('T')[1].split(':')[1]
       : null;
 
+      const updatedParticipants = await Promise.all(
+        event.participants.map(async participant => {
+          const user = await User.findById(participant.userid)
+          if (user) {
+            return {
+              userid: user._id,
+              name: user.name,
+              profileImageUrl: user.profileImageUrl,
+              bio: user.bio,
+            }
+          }
+          // If user not found, return the existing participant data
+          return participant
+        })
+      )
+
+      const updatedOrganizer = await User.findById(event.organizer)
+        const organizerDetails = updatedOrganizer
+          ? {
+              userid: updatedOrganizer._id,
+              name: updatedOrganizer.name,
+              profileImageUrl: updatedOrganizer.profileImageUrl,
+              bio: updatedOrganizer.bio,
+            }
+          : event.organizer
+
     return NextResponse.json({
       success: true,
       message: {
@@ -36,12 +63,14 @@ export async function GET(req, { params }) {
         endDate: formattedEndDate,
         startTime: formattedStartTime,
         endTime: formattedEndTime,
+        participants: updatedParticipants,
+        organizer: organizerDetails,
       },
     })
   } catch (error) {
     return NextResponse.json({
       success: false,
       message: 'Error retrieving event',
-    })
+    }, { status: 500 })
   }
 }

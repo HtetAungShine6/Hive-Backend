@@ -43,6 +43,16 @@ export async function GET(req) {
           })
         )
 
+        const updatedOrganizer = await User.findById(event.organizer)
+        const organizerDetails = updatedOrganizer
+          ? {
+              userid: updatedOrganizer._id,
+              name: updatedOrganizer.name,
+              profileImageUrl: updatedOrganizer.profileImageUrl,
+              bio: updatedOrganizer.bio,
+            }
+          : event.organizer
+
         return {
           ...event.toObject(),
           startDate: formattedStartDate,
@@ -50,6 +60,7 @@ export async function GET(req) {
           startTime: formattedStartTime,
           endTime: formattedEndTime,
           participants: updatedParticipants, 
+          organizer: organizerDetails,
         }
       })
     )
