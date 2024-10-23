@@ -1,6 +1,7 @@
 import User from '@/models/User'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import bcryptjs from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 export async function GET(req, { params }) {
   const { id } = params
@@ -30,15 +31,48 @@ export async function GET(req, { params }) {
   }
 }
 
+const secret = process.env.JWT_SECRET
+
+const verifyToken = (req) => {
+  const token = req.headers.get('Authorization')?.split(' ')[1]
+  if (!token) {
+    return null
+  }
+  try {
+    return jwt.verify(token, secret)
+  } catch (err) {
+    console.error('JWT verification error:', err)
+    return null
+  }
+}
+
 export async function PUT(req, { params }) {
+  const decoded = verifyToken(req)
+  if (!decoded) {
+    return NextResponse.json({
+      success: false,
+      message: 'Unauthorized',
+    }, { status: 401 })
+  }
+
+  const userIdFromToken = decoded.id
   const { id } = params
+
+  // Check if the user is trying to update their own profile
+  if (userIdFromToken !== id) {
+    return NextResponse.json({
+      success: false,
+      message: 'Forbidden: You can only update your own profile',
+    }, { status: 403 })
+  }
+
   try {
     const user = await User.findById(id)
-
     if (!user) {
-      return NextResponse.json({ success: false, message: 'User not found' })
+      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 })
     }
 
+    // Parse the request body
     const {
       name,
       email,
@@ -53,6 +87,7 @@ export async function PUT(req, { params }) {
       password,
     } = await req.json()
 
+    // Update user fields
     user.name = name || user.name
     user.email = email || user.email
     user.dateOfBirth = dateOfBirth || user.dateOfBirth
@@ -61,21 +96,25 @@ export async function PUT(req, { params }) {
     user.about = about || user.about
     user.bio = bio || user.bio
     user.instagramLink = instagramLink || user.instagramLink
-    user.isOrganizer =
-      isOrganizer !== undefined ? isOrganizer : user.isOrganizer
+    user.isOrganizer = isOrganizer !== undefined ? isOrganizer : user.isOrganizer
     user.isSuspened = isSuspened !== undefined ? isSuspened : user.isSuspened
+
+    // If the password is provided, hash it and update
     if (password) {
       const salt = await bcryptjs.genSalt(10)
       const hashedPassword = await bcryptjs.hash(password, salt)
       user.password = hashedPassword
     }
+
+    // Save the updated user
     const updatedUser = await user.save()
 
-    return NextResponse.json({ success: true, message: updatedUser })
+    return NextResponse.json({ success: true, message: 'User updated successfully', user: updatedUser })
   } catch (error) {
+    console.error('Error updating user:', error)
     return NextResponse.json({
       success: false,
       message: 'Error updating user',
-    })
+    }, { status: 500 })
   }
 }
