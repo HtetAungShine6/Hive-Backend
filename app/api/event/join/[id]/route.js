@@ -29,8 +29,6 @@ export async function POST(req, { params }) {
   }
 
   const userId = decoded.id;
-  // const { userid } = await req.json()
-  // console.log('userid', userid)
   const { id } = params
 
   try {
@@ -42,6 +40,13 @@ export async function POST(req, { params }) {
 
     if (!user) {
       return NextResponse.json({ success: false, message: 'User not found' })
+    }
+
+    if (event.organizer === userId) {
+      return NextResponse.json({
+        success: false,
+        message: 'Organizer cannot join their own event',
+      })
     }
 
     if (event.participants.includes(userId)) {

@@ -60,16 +60,23 @@ export async function PUT(req, { params }) {
   }
 
   try {
+    const startDateTime = new Date(`${startDate}T${startTime}:00`);
+    const endDateTime = new Date(`${endDate}T${endTime}:00`);
+
+    if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) {
+      throw new Error('Invalid date or time format');
+    }
+
     const updatedEvent = await Event.findByIdAndUpdate(
       id,
       {
         eventImageUrl,
         name,
         location,
-        startDate,
-        endDate,
-        startTime,
-        endTime,
+        startDate: startDateTime,
+        endDate: endDateTime,
+        startTime: startDateTime,
+        endTime: endDateTime,
         maxParticipants,
         isLimited,
         category,
