@@ -24,7 +24,7 @@ export async function PUT(req, { params }) {
     return NextResponse.json({
       success: false,
       message: 'Unauthorized',
-    })
+    }, { status: 401 })
   }
 
   const { id } = params
@@ -86,8 +86,8 @@ export async function PUT(req, { params }) {
       { new: true }
     )
 
-    return NextResponse.json({ success: true, message: updatedEvent })
+    return NextResponse.json({ success: true, message: updatedEvent }, { status: 200 })
   } catch (err) {
-    return NextResponse.json({ success: false, message: err })
+    return NextResponse.json({ success: false, message: err }, { status: 500 })
   }
 }

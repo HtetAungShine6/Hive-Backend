@@ -65,7 +65,7 @@ export async function GET(req) {
       })
     )
 
-    return NextResponse.json({ success: true, message: formattedEvents })
+    return NextResponse.json({ success: true, message: formattedEvents }, { status: 200 })
   } catch (err) {
     return NextResponse.json(
       { success: false, message: err.message },

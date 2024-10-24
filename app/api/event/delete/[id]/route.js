@@ -24,20 +24,20 @@ export async function DELETE(req) {
     return NextResponse.json({
       success: false,
       message: 'Unauthorized',
-    })
+    }, { status: 401 })
   }
   const { id } = req.params
 
   try {
     const event = await Event.findById(id)
     if (!event) {
-      return NextResponse.json({ success: false, message: 'Event not found' })
+      return NextResponse.json({ success: false, message: 'Event not found' }, { status: 404 })
     }
 
     await event.delete()
 
-    return NextResponse.json({ success: true, message: 'Event deleted' })
+    return NextResponse.json({ success: true, message: 'Event deleted' }, { status: 200 })
   } catch (err) {
-    return NextResponse.json({ success: false, message: err.message })
+    return NextResponse.json({ success: false, message: err.message }, { status: 500 })
   }
 }

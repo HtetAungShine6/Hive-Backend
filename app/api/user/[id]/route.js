@@ -109,7 +109,7 @@ export async function PUT(req, { params }) {
     // Save the updated user
     const updatedUser = await user.save()
 
-    return NextResponse.json({ success: true, message: 'User updated successfully', user: updatedUser })
+    return NextResponse.json({ success: true, message: 'User updated successfully', user: updatedUser }, { status: 200 })
   } catch (error) {
     console.error('Error updating user:', error)
     return NextResponse.json({

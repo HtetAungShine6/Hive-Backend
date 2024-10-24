@@ -25,7 +25,7 @@ export async function POST(req, { params }) {
     return NextResponse.json({
       success: false,
       message: 'Unauthorized',
-    })
+    }, { status: 401 })
   }
 
   const userId = decoded.id;
@@ -34,26 +34,26 @@ export async function POST(req, { params }) {
   try {
     const event = await Event.findById(id)
     if (!event) {
-      return NextResponse.json({ success: false, message: 'Event not found' })
+      return NextResponse.json({ success: false, message: 'Event not found' }, { status: 404 })
     }
     const user = await User.findById(userId)
 
     if (!user) {
-      return NextResponse.json({ success: false, message: 'User not found' })
+      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 })
     }
 
     if (event.organizer === userId) {
       return NextResponse.json({
         success: false,
         message: 'Organizer cannot join their own event',
-      })
+      }, { status: 409 })
     }
 
     if (event.participants.includes(userId)) {
       return NextResponse.json({
         success: false,
         message: 'User already joined',
-      })
+      }, { status: 409 })
     }
 
     event.participants.push({
@@ -68,7 +68,7 @@ export async function POST(req, { params }) {
     return NextResponse.json({
       success: true,
       message: 'Join Successful',
-    })
+    }, { status: 200 })
   } catch (error) {
     return NextResponse.json({
       success: false,

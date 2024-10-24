@@ -66,7 +66,7 @@ export async function GET(req, { params }) {
         participants: updatedParticipants,
         organizer: organizerDetails,
       },
-    })
+    }, { status: 200 })
   } catch (error) {
     return NextResponse.json({
       success: false,

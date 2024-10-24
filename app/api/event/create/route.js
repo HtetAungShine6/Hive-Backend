@@ -78,5 +78,5 @@ export async function POST(req) {
 
   await newEvent.save()
 
-  return NextResponse.json({ success: true, message: newEvent })
+  return NextResponse.json({ success: true, message: newEvent }, { status: 201 })
 }

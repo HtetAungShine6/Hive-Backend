@@ -19,7 +19,7 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       message: formattedUsers,
-    })
+    }, { status: 200 });
   } catch (error) {
     return NextResponse.json({
       success: false,
