@@ -49,7 +49,7 @@ export async function POST(req, { params }) {
       }, { status: 409 })
     }
 
-    if (event.participants.includes(userId)) {
+    if (event.participants.some(participant => participant.userid === userId)) {
       return NextResponse.json({
         success: false,
         message: 'User already joined',
