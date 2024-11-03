@@ -9,7 +9,7 @@ export async function GET(req, { params }) {
     const user = await User.findById(id).select('-password')
 
     if (!user) {
-      return NextResponse.json({ success: false, message: 'User not found' })
+      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 })
     }
 
     const formattedDateOfBirth = user.dateOfBirth
@@ -27,7 +27,7 @@ export async function GET(req, { params }) {
     return NextResponse.json({
       success: false,
       message: 'Error retrieving user',
-    })
+    }, { status: 500 })
   }
 }
 
@@ -116,5 +116,49 @@ export async function PUT(req, { params }) {
       success: false,
       message: 'Error updating user',
     }, { status: 500 })
+  }
+}
+
+export async function DELETE(req, { params }) {
+  const decoded = verifyToken(req)
+  if (!decoded) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Unauthorized',
+      },
+      { status: 401 }
+    )
+  }
+
+  const userIdFromToken = decoded.id
+  const { id } = params
+
+  if (userIdFromToken !== id) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Forbidden: You can only delete your own profile',
+      },
+      { status: 403 }
+    )
+  }
+
+  try {
+    const user = await User.findByIdAndDelete(id)
+    if (!user) {
+      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 })
+    }
+
+    return NextResponse.json({ success: true, message: 'User deleted successfully' }, { status: 200 })
+  } catch (error) {
+    console.error('Error deleting user:', error)
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Error deleting user',
+      },
+      { status: 500 }
+    )
   }
 }
