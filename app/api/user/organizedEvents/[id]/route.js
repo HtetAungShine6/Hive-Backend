@@ -35,7 +35,7 @@ export async function GET(req, { params }) {
     return NextResponse.json({
       success: true,
       message: organizedEvents,
-    });
+    }, { status: 200 });
   } catch (error) {
     console.error('Error retrieving organized events:', error);
     return NextResponse.json({

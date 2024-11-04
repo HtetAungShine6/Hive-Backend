@@ -22,7 +22,7 @@ export async function GET(req, { params }) {
         ...user.toObject(),
         dateOfBirth: formattedDateOfBirth, 
       },
-    })
+    }, { status: 200 })
   } catch (error) {
     return NextResponse.json({
       success: false,

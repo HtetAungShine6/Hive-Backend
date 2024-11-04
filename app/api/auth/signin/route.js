@@ -14,7 +14,7 @@ export async function POST(request) {
       return NextResponse.json({
         success: false,
         message: 'User does not exist',
-      })
+      }, { status: 404 })
     }
 
     // Check if the password is correct
@@ -24,7 +24,7 @@ export async function POST(request) {
       return NextResponse.json({
         success: false,
         message: 'Invalid credentials',
-      })
+      }, { status: 401 })
     }
 
     // Generate a JWT token
@@ -47,11 +47,11 @@ export async function POST(request) {
           dateOfBirth: formattedDateOfBirth, // formatted date
         },
       },
-    })
+    }, { status: 200 })
   } catch (error) {
     return NextResponse.json({
       success: false,
       message: error.message,
-    })
+    }, { status: 500 })
   }
 }

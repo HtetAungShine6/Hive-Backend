@@ -26,7 +26,7 @@ export async function POST(request) {
       return NextResponse.json({
         success: false,
         message: 'User already exists',
-      })
+      }, { status: 400 })
     }
 
     // Hash the password
@@ -74,8 +74,8 @@ export async function POST(request) {
           dateOfBirth: formattedDateOfBirth,  // formatted date
         }
       }
-    })
+    }, { status: 201 })
   } catch (error) {
-    return NextResponse.json({ success: false, message: error.message })
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 })
   }
 }

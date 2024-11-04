@@ -8,7 +8,7 @@ export async function GET(req, { params }) {
     const event = await Event.findById(id)
 
     if (!event) {
-      return NextResponse.json({ success: false, message: 'Event not found' })
+      return NextResponse.json({ success: false, message: 'Event not found' }, { status: 404 })
     }
 
     // Format the startDate and endDate
