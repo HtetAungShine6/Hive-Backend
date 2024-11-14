@@ -37,6 +37,7 @@ export async function GET(req, { params }) {
               userid: user._id,
               name: user.name,
               profileImageUrl: user.profileImageUrl,
+              instagramLink: user.instagramLink,
               bio: user.bio,
             }
           }
@@ -51,6 +52,7 @@ export async function GET(req, { params }) {
               userid: updatedOrganizer._id,
               name: updatedOrganizer.name,
               profileImageUrl: updatedOrganizer.profileImageUrl,
+              instagramLink: updatedOrganizer.instagramLink,
               bio: updatedOrganizer.bio,
             }
           : event.organizer
