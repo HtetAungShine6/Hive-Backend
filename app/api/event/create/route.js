@@ -41,7 +41,6 @@ export async function POST(req) {
     category,
     additionalInfo,
     isPrivate,
-    organizer,
   } = await req.json()
 
   if (
