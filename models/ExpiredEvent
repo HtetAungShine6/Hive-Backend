@@ -32,11 +32,11 @@ const expiredEventSchema = new mongoose.Schema({
   },
   maxParticipants: {
     type: Number,
-    default: 0,
+    default: 20,
   },
-  isLimited: {
-    type: Boolean,
-    default: false,
+  minAge: {
+    type: Number,
+    default: 0,
   },
   category: {
     type: Array,
@@ -46,6 +46,10 @@ const expiredEventSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  isPrivate: {
+    type: Boolean,
+    default: false,
+  },
   participants: {
     type: Array,
     default: [],
@@ -53,6 +57,10 @@ const expiredEventSchema = new mongoose.Schema({
   organizer: {
     type: String,
     required: true,
+  },
+  pendingParticipants: {
+    type: Array,
+    default: [],
   },
 })
 

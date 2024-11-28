@@ -37,9 +37,10 @@ export async function POST(req) {
     startTime,
     endTime,
     maxParticipants,
-    isLimited,
+    minAge,
     category,
     additionalInfo,
+    isPrivate,
     organizer,
   } = await req.json()
 
@@ -70,9 +71,10 @@ export async function POST(req) {
     startTime: startDateTime,
     endTime: endDateTime,
     maxParticipants,
-    isLimited,
+    minAge,
     category,
     additionalInfo,
+    isPrivate,
     organizer: userId,
   })
 

@@ -56,12 +56,45 @@ export async function POST(req, { params }) {
       }, { status: 409 })
     }
 
-    event.participants.push({
-      userid: userId,
-      name: user.name,
-      profileImageUrl: user.profileImageUrl,
-      bio: user.bio,
-    })
+    if (event.pendingParticipant.some(pendingParticipant => pendingParticipant.userid === userId)) {
+      return NextResponse.json({
+        success: false,
+        message: 'User already pending',
+      }, { status: 409 })
+    }
+
+    // event.participants.push({
+    //   userid: userId,
+    //   name: user.name,
+    //   profileImageUrl: user.profileImageUrl,
+    //   bio: user.bio,
+    // })
+
+    if (event.participants.length >= event.maxParticipants) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Event has reached the maximum number of participants',
+        },
+        { status: 409 }
+      )
+    }
+
+    if (event.isPrivate) {
+      event.pendingParticipants.push({
+        userid: userId,
+        name: user.name,
+        profileImageUrl: user.profileImageUrl,
+        bio: user.bio,
+      })
+    } else {
+      event.participants.push({
+        userid: userId,
+        name: user.name,
+        profileImageUrl: user.profileImageUrl,
+        bio: user.bio,
+      })
+    }
 
     await event.save()
 

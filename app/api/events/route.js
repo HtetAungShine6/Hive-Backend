@@ -72,6 +72,24 @@ export async function GET(req) {
           bio: organizer.bio,
         } : event.organizer;
 
+        const updatedPendingParticipants = await Promise.all(
+          event.pendingParticipants.map(async pendingParticipant => {
+            const user = await User.findById(pendingParticipant.userid)
+            if (user) {
+              // Use the updated user data
+              return {
+                userid: user._id,
+                name: user.name,
+                profileImageUrl: user.profileImageUrl,
+                instagramLink: user.instagramLink,
+                bio: user.bio,
+              }
+            }
+            // If user not found, return the existing participant data
+            return pendingParticipant
+          })
+        )
+
         return {
           ...event.toObject(),
           startDate: formattedStartDate,
@@ -80,6 +98,7 @@ export async function GET(req) {
           endTime: formattedEndTime,
           participants: updatedParticipants,
           organizer: organizerDetails,
+          pendingParticipants: updatedPendingParticipants,
         };
       })
     );

@@ -57,6 +57,23 @@ export async function GET(req, { params }) {
             }
           : event.organizer
 
+          const updatedPendingParticipants = await Promise.all(
+            event.pendingParticipants.map(async pendingParticipant => {
+              const user = await User.findById(pendingParticipant.userid)
+              if (user) {
+                return {
+                  userid: user._id,
+                  name: user.name,
+                  profileImageUrl: user.profileImageUrl,
+                  instagramLink: user.instagramLink,
+                  bio: user.bio,
+                }
+              }
+              // If user not found, return the existing participant data
+              return pendingParticipant
+            })
+          )
+
     return NextResponse.json({
       success: true,
       message: {
@@ -67,6 +84,7 @@ export async function GET(req, { params }) {
         endTime: formattedEndTime,
         participants: updatedParticipants,
         organizer: organizerDetails,
+        pendingParticipants: updatedPendingParticipants,
       },
     }, { status: 200 })
   } catch (error) {
