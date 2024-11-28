@@ -45,6 +45,14 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  verificationImageUrl: {
+    type: String,
+    default: '',
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
   password: {
     type: String,
     required: true,

@@ -17,6 +17,8 @@ export async function POST(request) {
       instagramLink,
       isOrganizer,
       isSuspened,
+      verificatinImageUrl,
+      isVerified,
     } = await request.json()
 
     // Check if the user already exists
@@ -46,6 +48,8 @@ export async function POST(request) {
       instagramLink,
       isOrganizer,
       isSuspened,
+      verificatinImageUrl,
+      isVerified,
     })
 
     const user = await newUser.save()

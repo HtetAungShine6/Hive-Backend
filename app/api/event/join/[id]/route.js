@@ -105,7 +105,7 @@ export async function POST(req, { params }) {
         message: 'Join Successful',
       }, { status: 200 })
     }
-  } catch (error) {
+  } catch (error) { 
     return NextResponse.json({
       success: false,
       message: 'Error retrieving event',
