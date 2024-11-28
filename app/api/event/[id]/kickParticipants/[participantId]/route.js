@@ -23,12 +23,7 @@ export async function POST(req, { params }) {
   }
 
   const organizerId = decoded.id;
-  const { id: eventId, participantId } = params; // Extract both IDs
-  const { action } = await req.json();
-
-  if (!['approve', 'reject'].includes(action)) {
-    return NextResponse.json({ success: false, message: 'Invalid action' }, { status: 400 });
-  }
+  const { id: eventId, participantId } = params; 
 
   try {
     const event = await Event.findById(eventId);
