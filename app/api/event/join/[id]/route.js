@@ -86,7 +86,12 @@ export async function POST(req, { params }) {
         name: user.name,
         profileImageUrl: user.profileImageUrl,
         bio: user.bio,
-      })
+      });
+      await event.save()
+      return NextResponse.json({
+        success: true,
+        message: 'Join Request Pending',
+      }, { status: 200 })
     } else {
       event.participants.push({
         userid: userId,
@@ -94,14 +99,12 @@ export async function POST(req, { params }) {
         profileImageUrl: user.profileImageUrl,
         bio: user.bio,
       })
+      await event.save()
+      return NextResponse.json({
+        success: true,
+        message: 'Join Successful',
+      }, { status: 200 })
     }
-
-    await event.save()
-
-    return NextResponse.json({
-      success: true,
-      message: 'Join Successful',
-    }, { status: 200 })
   } catch (error) {
     return NextResponse.json({
       success: false,
