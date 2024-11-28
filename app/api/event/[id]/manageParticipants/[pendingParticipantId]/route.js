@@ -23,7 +23,7 @@ export async function POST(req, { params }) {
   }
 
   const organizerId = decoded.id;
-  const { id: eventId, id: pendingParticipantId } = params;
+  const { id: eventId, pendingParticipantId } = params; // Extract both IDs
   const { action } = await req.json();
 
   if (!['approve', 'reject'].includes(action)) {
@@ -52,11 +52,13 @@ export async function POST(req, { params }) {
     }
 
     if (action === 'approve') {
+      // Approve action: move pendingParticipant to participants
       const participant = event.pendingParticipants.splice(pendingIndex, 1)[0];
       event.participants.push(participant);
-    } 
-
-    // No change needed for "reject" as it keeps the participant in the pendingParticipants array.
+    } else if (action === 'reject') {
+      // Reject action: remove pendingParticipant
+      event.pendingParticipants.splice(pendingIndex, 1);
+    }
 
     await event.save();
 
