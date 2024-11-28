@@ -56,7 +56,7 @@ export async function POST(req, { params }) {
       }, { status: 409 })
     }
 
-    if (event.pendingParticipant.some(pendingParticipant => pendingParticipant.userid === userId)) {
+    if (event.pendingParticipants.some(pendingParticipant => pendingParticipant.userid === userId)) {
       return NextResponse.json({
         success: false,
         message: 'User already pending',
