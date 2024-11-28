@@ -18,7 +18,6 @@ export async function POST(request) {
       isOrganizer,
       isSuspened,
       verificatinImageUrl,
-      isVerified,
     } = await request.json()
 
     // Check if the user already exists
@@ -49,7 +48,7 @@ export async function POST(request) {
       isOrganizer,
       isSuspened,
       verificatinImageUrl,
-      isVerified,
+      verificationStatus: 'notVerified',
     })
 
     const user = await newUser.save()

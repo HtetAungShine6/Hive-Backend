@@ -85,6 +85,7 @@ export async function PUT(req, { params }) {
       isOrganizer,
       isSuspened,
       password,
+      verificationStatus,
     } = await req.json()
 
     // Update user fields
@@ -106,6 +107,20 @@ export async function PUT(req, { params }) {
       user.password = hashedPassword
     }
 
+    if (verificationStatus) {
+      const allowedStatuses = ['verified', 'rejected', 'pending', 'notVerified'];
+      if (!allowedStatuses.includes(verificationStatus)) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: 'Invalid verificationStatus value',
+          },
+          { status: 400 }
+        );
+      }
+      user.verificationStatus = verificationStatus;
+    }
+    
     // Save the updated user
     const updatedUser = await user.save()
 
