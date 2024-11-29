@@ -5,7 +5,7 @@ export async function GET(req, { params }) {
   const { id } = params; // ID of the user whose followers we want to fetch
 
   try {
-    const followers = await Relationship.find({ following: id }).populate('follower', 'id name profileImageUrl');
+    const followers = await Relationship.find({ following: id }).populate('follower', '_id name profileImageUrl');
 
     const result = followers.map(relationship => ({
       id: relationship.follower._id,
