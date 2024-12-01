@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import ExpiredEvent from '@/models/ExpiredEvent';
+import User from '@/models/User';
 import jwt from 'jsonwebtoken';
 
 const secret = process.env.JWT_SECRET;
@@ -17,8 +18,15 @@ const verifyToken = (req) => {
   }
 };
 
+// Helper functions for formatting date and time
+const formatDate = (date) => (date ? date.toISOString().split('T')[0] : null);
+const formatTime = (date) =>
+  date
+    ? date.toISOString().split('T')[1].split(':').slice(0, 2).join(':')
+    : null;
+
 export async function GET(req, { params }) {
-  const { id } = params; 
+  const { id } = params;
   const decoded = verifyToken(req);
 
   if (!decoded) {
@@ -30,11 +38,40 @@ export async function GET(req, { params }) {
   }
 
   try {
+    // Fetch joined events
     const joinedEvents = await ExpiredEvent.find({ 'participants.userid': id });
+
+    // Format events and retrieve organizer details
+    const formattedEvents = await Promise.all(
+      joinedEvents.map(async (event) => {
+        let organizerDetails = null;
+        if (event.organizer) {
+          const organizer = await User.findById(event.organizer);
+          if (organizer) {
+            organizerDetails = {
+              userid: organizer._id,
+              name: organizer.name,
+              profileImageUrl: organizer.profileImageUrl,
+              instagramLink: organizer.instagramLink,
+              bio: organizer.bio,
+            };
+          }
+        }
+
+        return {
+          ...event.toObject(),
+          startDate: formatDate(new Date(event.startDate)),
+          endDate: formatDate(new Date(event.endDate)),
+          startTime: formatTime(new Date(event.startDate)),
+          endTime: formatTime(new Date(event.endDate)),
+          organizer: organizerDetails,
+        };
+      })
+    );
 
     return NextResponse.json({
       success: true,
-      message: joinedEvents,
+      message: formattedEvents,
     }, { status: 200 });
   } catch (error) {
     console.error('Error retrieving joined events:', error);
