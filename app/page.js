@@ -1,5 +1,3 @@
-// Admin Dashboard Splash Screen to go to Admin Dashboard Sign In
-
 import Link from 'next/link'
 
 export default function Page() {

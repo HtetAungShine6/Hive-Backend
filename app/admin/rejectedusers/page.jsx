@@ -1,13 +1,13 @@
 'use client'
-import { Sidebar } from '../../../components/ui/sidebar'
-import { Header } from '../../../components/ui/header'
+import { Sidebar } from '@/components/ui/sidebar'
+import { Header } from '@/components/ui/header'
 
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
-import { SearchBar } from '../../../components/ui/search-bar'
-import { UserTable } from '../../../components/ui/rejected-user-table'
+import { SearchBar } from '@/components/ui/search-bar'
+import { UserTable } from '@/components/ui/rejected-user-table'
 
-import { useAuthStore } from '../../../zustand/admin-store'
+import { useAuthStore } from '@/zustand/admin-store'
 import { useRouter } from 'next/navigation'
 
 export default function AdminEvents() {

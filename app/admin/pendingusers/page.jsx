@@ -1,11 +1,11 @@
 'use client'
 
-import { Sidebar } from '../../../components/ui/sidebar'
-import { Header } from '../../../components/ui/header'
-import { SearchBar } from '../../../components/ui/search-bar'
-import { UserTable } from '../../../components/ui/user-table'
+import { Sidebar } from '@/components/ui/sidebar'
+import { Header } from '@/components/ui/header'
+import { SearchBar } from '@/components/ui/search-bar'
+import { UserTable } from '@/components/ui/user-table'
 
-import { useAuthStore } from '../../../zustand/admin-store'
+import { useAuthStore } from '@/zustand/admin-store'
 import { useRouter } from 'next/navigation'
 
 export default function AdminUsers() {
