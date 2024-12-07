@@ -1,4 +1,4 @@
-import User from '@/models/User'
+import User from '../../../models/User'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
@@ -16,14 +16,20 @@ export async function GET() {
       }
     })
 
-    return NextResponse.json({
-      success: true,
-      message: formattedUsers,
-    }, { status: 200 });
+    return NextResponse.json(
+      {
+        success: true,
+        message: formattedUsers,
+      },
+      { status: 200 }
+    )
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message: error.message
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        message: error.message,
+      },
+      { status: 500 }
+    )
   }
 }

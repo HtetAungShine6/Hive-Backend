@@ -1,6 +1,6 @@
-import dbConnect from "@/libs/db";
+import dbConnect from './libs/db'
 
 export async function register() {
-  console.log("Connecting to database...");
-  await dbConnect();
+  console.log('Connecting to database...')
+  await dbConnect()
 }
