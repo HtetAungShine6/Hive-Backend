@@ -17,7 +17,7 @@ export async function POST(request) {
       instagramLink,
       isOrganizer,
       isSuspened,
-      verificatinImageUrl,
+      verificationImageUrl,
     } = await request.json()
 
     // Check if the user already exists
@@ -47,7 +47,7 @@ export async function POST(request) {
       instagramLink,
       isOrganizer,
       isSuspened,
-      verificatinImageUrl,
+      verificationImageUrl,
       verificationStatus: 'notVerified',
     })
 
