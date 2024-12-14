@@ -1,0 +1,11 @@
+{
+    "applinks": {
+      "apps": [],
+      "details": [
+        {
+          "appIDs": ["A89P8LLWX2.com.austinxu.dcode.events-au"],
+          "paths": ["/event/*"]
+        }
+      ]
+    }
+}
