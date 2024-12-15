@@ -38,7 +38,7 @@ export async function GET(req, { params }) {
               name: user.name,
               profileImageUrl: user.profileImageUrl,
               instagramLink: user.instagramLink,
-              verificatiionStatus: user.verificationStatus,
+              verificationStatus: user.verificationStatus,
               bio: user.bio,
             }
           }
@@ -54,7 +54,7 @@ export async function GET(req, { params }) {
               name: updatedOrganizer.name,
               profileImageUrl: updatedOrganizer.profileImageUrl,
               instagramLink: updatedOrganizer.instagramLink,
-              verificatiionStatus: updatedOrganizer.verificationStatus,
+              verificationStatus: updatedOrganizer.verificationStatus,
               bio: updatedOrganizer.bio,
             }
           : event.organizer
@@ -68,7 +68,7 @@ export async function GET(req, { params }) {
                   name: user.name,
                   profileImageUrl: user.profileImageUrl,
                   instagramLink: user.instagramLink,
-                  verificatiionStatus: user.verificationStatus,
+                  verificationStatus: user.verificationStatus,
                   bio: user.bio,
                 }
               }
