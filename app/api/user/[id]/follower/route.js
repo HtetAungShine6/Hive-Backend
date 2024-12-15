@@ -25,6 +25,7 @@ export async function GET(req, { params }) {
         id: relationship.follower._id,
         name: relationship.follower.name,
         profileImageUrl: relationship.follower.profileImageUrl,
+        bio: relationship.follower.bio,
       }));
 
     return NextResponse.json({ success: true, followers: result }, { status: 200 });
