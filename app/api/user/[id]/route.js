@@ -1,4 +1,4 @@
-import User from '@/models/User'
+import User from '../../../../models/User'
 import { NextRequest, NextResponse } from 'next/server'
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
@@ -9,25 +9,34 @@ export async function GET(req, { params }) {
     const user = await User.findById(id).select('-password')
 
     if (!user) {
-      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 })
+      return NextResponse.json(
+        { success: false, message: 'User not found' },
+        { status: 404 }
+      )
     }
 
     const formattedDateOfBirth = user.dateOfBirth
       ? user.dateOfBirth.toISOString().split('T')[0]
-      : null;
+      : null
 
-    return NextResponse.json({
-      success: true,
-      message: {
-        ...user.toObject(),
-        dateOfBirth: formattedDateOfBirth, 
+    return NextResponse.json(
+      {
+        success: true,
+        message: {
+          ...user.toObject(),
+          dateOfBirth: formattedDateOfBirth,
+        },
       },
-    }, { status: 200 })
+      { status: 200 }
+    )
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      message: 'Error retrieving user',
-    }, { status: 500 })
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Error retrieving user',
+      },
+      { status: 500 }
+    )
   }
 }
 
@@ -49,10 +58,13 @@ const verifyToken = (req) => {
 export async function PUT(req, { params }) {
   const decoded = verifyToken(req)
   if (!decoded) {
-    return NextResponse.json({
-      success: false,
-      message: 'Unauthorized',
-    }, { status: 401 })
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Unauthorized',
+      },
+      { status: 401 }
+    )
   }
 
   const userIdFromToken = decoded.id
@@ -60,16 +72,22 @@ export async function PUT(req, { params }) {
 
   // Check if the user is trying to update their own profile
   if (userIdFromToken !== id) {
-    return NextResponse.json({
-      success: false,
-      message: 'Forbidden: You can only update your own profile',
-    }, { status: 403 })
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Forbidden: You can only update your own profile',
+      },
+      { status: 403 }
+    )
   }
 
   try {
     const user = await User.findById(id)
     if (!user) {
-      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 })
+      return NextResponse.json(
+        { success: false, message: 'User not found' },
+        { status: 404 }
+      )
     }
 
     // Parse the request body
@@ -98,9 +116,11 @@ export async function PUT(req, { params }) {
     user.about = about || user.about
     user.bio = bio || user.bio
     user.instagramLink = instagramLink || user.instagramLink
-    user.isOrganizer = isOrganizer !== undefined ? isOrganizer : user.isOrganizer
+    user.isOrganizer =
+      isOrganizer !== undefined ? isOrganizer : user.isOrganizer
     user.isSuspened = isSuspened !== undefined ? isSuspened : user.isSuspened
-    user.verificationImageUrl = verificationImageUrl || user.verificationImageUrl
+    user.verificationImageUrl =
+      verificationImageUrl || user.verificationImageUrl
     user.verificationStatus = verificationStatus || user.verificationStatus
 
     // If the password is provided, hash it and update
@@ -111,7 +131,7 @@ export async function PUT(req, { params }) {
     }
 
     if (verificationStatus) {
-      const allowedStatuses = ['verified', 'rejected', 'pending', 'notVerified'];
+      const allowedStatuses = ['verified', 'rejected', 'pending', 'notVerified']
       if (!allowedStatuses.includes(verificationStatus)) {
         return NextResponse.json(
           {
@@ -119,21 +139,31 @@ export async function PUT(req, { params }) {
             message: 'Invalid verificationStatus value',
           },
           { status: 400 }
-        );
+        )
       }
-      user.verificationStatus = verificationStatus;
+      user.verificationStatus = verificationStatus
     }
-    
+
     // Save the updated user
     const updatedUser = await user.save()
 
-    return NextResponse.json({ success: true, message: 'User updated successfully', user: updatedUser }, { status: 200 })
+    return NextResponse.json(
+      {
+        success: true,
+        message: 'User updated successfully',
+        user: updatedUser,
+      },
+      { status: 200 }
+    )
   } catch (error) {
     console.error('Error updating user:', error)
-    return NextResponse.json({
-      success: false,
-      message: 'Error updating user',
-    }, { status: 500 })
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Error updating user',
+      },
+      { status: 500 }
+    )
   }
 }
 
@@ -165,10 +195,16 @@ export async function DELETE(req, { params }) {
   try {
     const user = await User.findByIdAndDelete(id)
     if (!user) {
-      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 })
+      return NextResponse.json(
+        { success: false, message: 'User not found' },
+        { status: 404 }
+      )
     }
 
-    return NextResponse.json({ success: true, message: 'User deleted successfully' }, { status: 200 })
+    return NextResponse.json(
+      { success: true, message: 'User deleted successfully' },
+      { status: 200 }
+    )
   } catch (error) {
     console.error('Error deleting user:', error)
     return NextResponse.json(

@@ -1,4 +1,4 @@
-import Admin from '@/models/Admin'
+import Admin from '../../../../models/Admin'
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { NextResponse } from 'next/server'

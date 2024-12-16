@@ -1,4 +1,4 @@
-import User from '@/models/User'
+import User from '../../../../models/User'
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { NextResponse } from 'next/server'
@@ -25,10 +25,13 @@ export async function POST(request) {
     const existingUser = await User.findOne({ email })
 
     if (existingUser) {
-      return NextResponse.json({
-        success: false,
-        message: 'User already exists',
-      }, { status: 400 })
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'User already exists',
+        },
+        { status: 400 }
+      )
     }
 
     // Hash the password
@@ -69,17 +72,23 @@ export async function POST(request) {
     const formattedDateOfBirth = user.dateOfBirth.toISOString().split('T')[0]
 
     // Return the response with token and user details
-    return NextResponse.json({
-      success: true,
-      message: {
-        token,
-        user: {
-          ...user.toObject(),
-          dateOfBirth: formattedDateOfBirth,  // formatted date
-        }
-      }
-    }, { status: 201 })
+    return NextResponse.json(
+      {
+        success: true,
+        message: {
+          token,
+          user: {
+            ...user.toObject(),
+            dateOfBirth: formattedDateOfBirth, // formatted date
+          },
+        },
+      },
+      { status: 201 }
+    )
   } catch (error) {
-    return NextResponse.json({ success: false, message: error.message }, { status: 500 })
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 500 }
+    )
   }
 }

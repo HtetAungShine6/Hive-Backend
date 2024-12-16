@@ -1,4 +1,4 @@
-import Event from '@/models/Event'
+import Event from '../../../../../models/Event'
 import { NextRequest, NextResponse } from 'next/server'
 
 import jwt from 'jsonwebtoken'
@@ -21,10 +21,13 @@ const verifyToken = (req) => {
 export async function PUT(req, { params }) {
   const decoded = verifyToken(req)
   if (!decoded) {
-    return NextResponse.json({
-      success: false,
-      message: 'Unauthorized',
-    }, { status: 401 })
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Unauthorized',
+      },
+      { status: 401 }
+    )
   }
 
   const { id } = params
@@ -60,11 +63,11 @@ export async function PUT(req, { params }) {
   }
 
   try {
-    const startDateTime = new Date(`${startDate}T${startTime}:00`);
-    const endDateTime = new Date(`${endDate}T${endTime}:00`);
+    const startDateTime = new Date(`${startDate}T${startTime}:00`)
+    const endDateTime = new Date(`${endDate}T${endTime}:00`)
 
     if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) {
-      throw new Error('Invalid date or time format');
+      throw new Error('Invalid date or time format')
     }
 
     const updatedEvent = await Event.findByIdAndUpdate(
@@ -86,7 +89,10 @@ export async function PUT(req, { params }) {
       { new: true }
     )
 
-    return NextResponse.json({ success: true, message: updatedEvent }, { status: 200 })
+    return NextResponse.json(
+      { success: true, message: updatedEvent },
+      { status: 200 }
+    )
   } catch (err) {
     return NextResponse.json({ success: false, message: err }, { status: 500 })
   }

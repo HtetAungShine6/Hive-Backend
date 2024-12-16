@@ -1,4 +1,4 @@
-import Event from '@/models/Event'
+import Event from '../../../../models/Event'
 import { NextRequest, NextResponse } from 'next/server'
 
 import jwt from 'jsonwebtoken'
@@ -21,13 +21,16 @@ const verifyToken = (req) => {
 export async function POST(req) {
   const decoded = verifyToken(req)
   if (!decoded) {
-    return NextResponse.json({
-      success: false,
-      message: 'Unauthorized',
-    }, { status: 401 })
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Unauthorized',
+      },
+      { status: 401 }
+    )
   }
 
-  const userId = decoded.id;
+  const userId = decoded.id
   const {
     eventImageUrl,
     name,
@@ -79,5 +82,8 @@ export async function POST(req) {
 
   await newEvent.save()
 
-  return NextResponse.json({ success: true, message: newEvent }, { status: 201 })
+  return NextResponse.json(
+    { success: true, message: newEvent },
+    { status: 201 }
+  )
 }
