@@ -12,7 +12,7 @@ export async function GET(req, { params }) {
 
   try {
     // Find relationships where the given ID is being followed
-    const following = await Relationship.find({ follower: id }).populate('following', '_id name profileImageUrl');
+    const following = await Relationship.find({ follower: id }).populate('following', '_id name profileImageUrl bio');
 
     if (!following.length) {
       return NextResponse.json({ success: true, following: [] }, { status: 200 });
@@ -25,6 +25,7 @@ export async function GET(req, { params }) {
         id: relationship.following._id,
         name: relationship.following.name,
         profileImageUrl: relationship.following.profileImageUrl,
+        bio: relationship.following.bio,
       }));
 
     return NextResponse.json({ success: true, following: result }, { status: 200 });

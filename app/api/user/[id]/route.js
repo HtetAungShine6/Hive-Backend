@@ -85,6 +85,7 @@ export async function PUT(req, { params }) {
       isOrganizer,
       isSuspened,
       password,
+      verificationImageUrl,
       verificationStatus,
     } = await req.json()
 
@@ -99,6 +100,8 @@ export async function PUT(req, { params }) {
     user.instagramLink = instagramLink || user.instagramLink
     user.isOrganizer = isOrganizer !== undefined ? isOrganizer : user.isOrganizer
     user.isSuspened = isSuspened !== undefined ? isSuspened : user.isSuspened
+    user.verificationImageUrl = verificationImageUrl || user.verificationImageUrl
+    user.verificationStatus = verificationStatus || user.verificationStatus
 
     // If the password is provided, hash it and update
     if (password) {
