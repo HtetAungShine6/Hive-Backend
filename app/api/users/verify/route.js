@@ -4,15 +4,11 @@ import { NextResponse } from 'next/server'
 export async function PUT(req) {
   const { userid } = await req.json()
   try {
-    const user = await User.findById(userid)
-    if (!user) {
-      return NextResponse.json(
-        { success: false, message: 'User not found' },
-        { status: 404 }
-      )
-    }
-    user.verficatiionStatus = 'approved'
-    await user.save()
+    await User.findByIdAndUpdate(userid, {
+      $set: {
+        verficatiionStatus: 'approved',
+      },
+    })
 
     return NextResponse.json(
       { success: true, message: 'User verified successfully', user: user },
