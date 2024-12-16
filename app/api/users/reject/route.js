@@ -1,4 +1,4 @@
-import User from '@/models/User'
+import User from '../../../../models/User'
 import { NextResponse } from 'next/server'
 
 export async function PUT(req) {
@@ -11,7 +11,7 @@ export async function PUT(req) {
         { status: 404 }
       )
     }
-    user.verficatiionStatus = 'rejected'
+    user.verificationStatus = 'rejected'
     await user.save()
 
     return NextResponse.json(
