@@ -41,7 +41,7 @@ export async function GET(req, { params }) {
         const user = await User.findById(participant.userid)
         if (user) {
           return {
-            userid: user._id,
+            _id: user._id,
             name: user.name,
             profileImageUrl: user.profileImageUrl,
             instagramLink: user.instagramLink,
@@ -57,7 +57,7 @@ export async function GET(req, { params }) {
     const updatedOrganizer = await User.findById(event.organizer)
     const organizerDetails = updatedOrganizer
       ? {
-          userid: updatedOrganizer._id,
+          _id: updatedOrganizer._id,
           name: updatedOrganizer.name,
           profileImageUrl: updatedOrganizer.profileImageUrl,
           instagramLink: updatedOrganizer.instagramLink,
@@ -71,7 +71,7 @@ export async function GET(req, { params }) {
         const user = await User.findById(pendingParticipant.userid)
         if (user) {
           return {
-            userid: user._id,
+            _id: user._id,
             name: user.name,
             profileImageUrl: user.profileImageUrl,
             instagramLink: user.instagramLink,

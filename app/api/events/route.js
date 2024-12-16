@@ -60,7 +60,7 @@ export async function GET(req) {
             if (user) {
               // Use the updated user data
               return {
-                userid: user._id,
+                _id: user._id,
                 name: user.name,
                 profileImageUrl: user.profileImageUrl,
                 instagramLink: user.instagramLink,
@@ -76,7 +76,7 @@ export async function GET(req) {
         const organizer = await User.findById(event.organizer)
         const organizerDetails = organizer
           ? {
-              userid: organizer._id,
+              _id: organizer._id,
               name: organizer.name,
               profileImageUrl: organizer.profileImageUrl,
               instagramLink: organizer.instagramLink,
@@ -91,7 +91,7 @@ export async function GET(req) {
             if (user) {
               // Use the updated user data
               return {
-                userid: user._id,
+                _id: user._id,
                 name: user.name,
                 profileImageUrl: user.profileImageUrl,
                 instagramLink: user.instagramLink,

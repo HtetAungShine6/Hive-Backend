@@ -55,7 +55,7 @@ export async function GET(req, { params }) {
           const organizer = await User.findById(event.organizer)
           if (organizer) {
             organizerDetails = {
-              userid: organizer._id,
+              _id: organizer._id,
               name: organizer.name,
               profileImageUrl: organizer.profileImageUrl,
               instagramLink: organizer.instagramLink,

@@ -31,9 +31,10 @@ export async function GET(req, { params }) {
     const result = following
       .filter((relationship) => relationship.following) // Exclude null references
       .map((relationship) => ({
-        id: relationship.following._id,
+        _id: relationship.following._id,
         name: relationship.following.name,
         profileImageUrl: relationship.following.profileImageUrl,
+        verificationStatus: relationship.following.verificationStatus,
         bio: relationship.following.bio,
       }))
 

@@ -106,9 +106,10 @@ export async function POST(req, { params }) {
 
     if (event.isPrivate) {
       event.pendingParticipants.push({
-        userid: userId,
+        _id: userId,
         name: user.name,
         profileImageUrl: user.profileImageUrl,
+        verificationStatus: user.verificationStatus,
         bio: user.bio,
       })
       await event.save()
@@ -121,9 +122,10 @@ export async function POST(req, { params }) {
       )
     } else {
       event.participants.push({
-        userid: userId,
+        _id: userId,
         name: user.name,
         profileImageUrl: user.profileImageUrl,
+        verificationStatus: user.verificationStatus,
         bio: user.bio,
       })
       await event.save()
