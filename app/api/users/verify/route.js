@@ -11,7 +11,7 @@ export async function PUT(req) {
     })
 
     return NextResponse.json(
-      { success: true, message: 'User verified successfully', user: user },
+      { success: true, message: 'User verified successfully' },
       { status: 200 }
     )
   } catch (error) {
