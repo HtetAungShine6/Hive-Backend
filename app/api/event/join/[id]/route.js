@@ -111,6 +111,7 @@ export async function POST(req, { params }) {
         profileImageUrl: user.profileImageUrl,
         verificationStatus: user.verificationStatus,
         bio: user.bio,
+        about: user.about,
       })
       await event.save()
       return NextResponse.json(
@@ -127,6 +128,7 @@ export async function POST(req, { params }) {
         profileImageUrl: user.profileImageUrl,
         verificationStatus: user.verificationStatus,
         bio: user.bio,
+        about: user.about,
       })
       await event.save()
       return NextResponse.json(

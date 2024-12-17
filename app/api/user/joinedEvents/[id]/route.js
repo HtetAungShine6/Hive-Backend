@@ -14,7 +14,7 @@ export async function GET(req, { params }) {
 
   try {
     // Fetch joined events
-    const joinedEvents = await ExpiredEvent.find({ 'participants.userid': id })
+    const joinedEvents = await ExpiredEvent.find({ 'participants._id': id })
 
     // Format events and retrieve organizer details
     const formattedEvents = await Promise.all(
@@ -28,7 +28,9 @@ export async function GET(req, { params }) {
               name: organizer.name,
               profileImageUrl: organizer.profileImageUrl,
               instagramLink: organizer.instagramLink,
+              verificationStatus: organizer.verificationStatus,
               bio: organizer.bio,
+              about: organizer.about,
             }
           }
         }

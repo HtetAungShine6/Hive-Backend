@@ -56,7 +56,7 @@ export async function POST(req, { params }) {
     }
 
     const pendingIndex = event.pendingParticipants.findIndex(
-      (participant) => participant.userid === pendingParticipantId
+      (participant) => participant._id === pendingParticipantId
     )
 
     if (pendingIndex === -1) {

@@ -66,6 +66,7 @@ export async function GET(req) {
                 instagramLink: user.instagramLink,
                 verificationStatus: user.verificationStatus,
                 bio: user.bio,
+                about: user.about,
               }
             }
             // If user not found, return the existing participant data
@@ -82,6 +83,7 @@ export async function GET(req) {
               instagramLink: organizer.instagramLink,
               verificationStatus: organizer.verificationStatus,
               bio: organizer.bio,
+              about: organizer.about,
             }
           : event.organizer
 
@@ -97,6 +99,7 @@ export async function GET(req) {
                 instagramLink: user.instagramLink,
                 verificationStatus: user.verificationStatus,
                 bio: user.bio,
+                about: user.about,
               }
             }
             // If user not found, return the existing participant data

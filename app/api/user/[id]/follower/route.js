@@ -17,7 +17,7 @@ export async function GET(req, { params }) {
     // Find relationships where the given ID is being followed
     const follower = await Relationship.find({ following: id }).populate(
       'follower',
-      '_id name profileImageUrl verificationStatus bio'
+      '_id name profileImageUrl verificationStatus bio about'
     )
 
     if (!follower.length) {
@@ -33,6 +33,7 @@ export async function GET(req, { params }) {
         profileImageUrl: relationship.follower.profileImageUrl,
         verificationStatus: relationship.follower.verificationStatus,
         bio: relationship.follower.bio,
+        about: relationship.follower.about,
       }))
 
     return NextResponse.json(

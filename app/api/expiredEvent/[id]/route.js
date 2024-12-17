@@ -38,7 +38,7 @@ export async function GET(req, { params }) {
 
     const updatedParticipants = await Promise.all(
       event.participants.map(async (participant) => {
-        const user = await User.findById(participant.userid)
+        const user = await User.findById(participant._id)
         if (user) {
           return {
             _id: user._id,

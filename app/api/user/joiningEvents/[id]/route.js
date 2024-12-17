@@ -1,22 +1,6 @@
 import { NextResponse } from 'next/server'
 import Event from '../../../../../models/Event'
 import User from '../../../../../models/User'
-import jwt from 'jsonwebtoken'
-
-const secret = process.env.JWT_SECRET
-
-const verifyToken = (req) => {
-  const token = req.headers.get('Authorization')?.split(' ')[1]
-  if (!token) {
-    return null
-  }
-  try {
-    return jwt.verify(token, secret)
-  } catch (err) {
-    console.error('JWT verification error:', err)
-    return null
-  }
-}
 
 // Helper functions for formatting date and time
 const formatDate = (date) => (date ? date.toISOString().split('T')[0] : null)
@@ -27,25 +11,10 @@ const formatTime = (date) =>
 
 export async function GET(req, { params }) {
   const { id } = params
-  const decoded = verifyToken(req)
-
-  if (!decoded) {
-    return NextResponse.json(
-      { success: false, message: 'Unauthorized' },
-      { status: 401 }
-    )
-  }
-
-  if (decoded.id !== id) {
-    return NextResponse.json(
-      { success: false, message: 'Forbidden: ID mismatch' },
-      { status: 403 }
-    )
-  }
 
   try {
-    // Fetch joined events
-    const joiningEvents = await Event.find({ 'participants.userid': id })
+    // Fetch events the user has joined
+    const joiningEvents = await Event.find({ 'participants._id': id })
 
     // Format events and retrieve organizer details
     const formattedEvents = await Promise.all(
@@ -59,7 +28,9 @@ export async function GET(req, { params }) {
               name: organizer.name,
               profileImageUrl: organizer.profileImageUrl,
               instagramLink: organizer.instagramLink,
+              verificationStatus: organizer.verificationStatus,
               bio: organizer.bio,
+              about: organizer.about,
             }
           }
         }
