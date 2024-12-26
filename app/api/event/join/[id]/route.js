@@ -62,7 +62,7 @@ export async function POST(req, { params }) {
     }
 
     if (
-      event.participants.some((participant) => participant.userid === userId)
+      event.participants.some((participant) => participant._id === userId)
     ) {
       return NextResponse.json(
         {
@@ -75,7 +75,7 @@ export async function POST(req, { params }) {
 
     if (
       event.pendingParticipants.some(
-        (pendingParticipant) => pendingParticipant.userid === userId
+        (pendingParticipant) => pendingParticipant._id === userId
       )
     ) {
       return NextResponse.json(
