@@ -78,8 +78,14 @@ export async function GET(req, { params }) {
   try {
     // Fetch events the user has joined and populate participants + organizer in one query
     const joiningEvents = await Event.find({ 'participants._id': id })
-      .populate('participants._id', 'name profileImageUrl instagramLink verificationStatus bio about')
-      .populate('organizer._id', 'name profileImageUrl instagramLink verificationStatus bio about')
+    .populate({
+      path: 'participants._id',
+      select: 'name profileImageUrl instagramLink verificationStatus bio about',
+    })
+    .populate({
+      path: 'organizer',
+      select: 'name profileImageUrl instagramLink verificationStatus bio about',
+    })
 
     // Format events
     const formattedEvents = joiningEvents.map(event => ({
