@@ -123,6 +123,26 @@ export async function GET(req, { params }) {
           })
         )
 
+        const pendingParticipantsDetails = await Promise.all(
+          event.pendingParticipants.map(async (pendingParticipant) => {
+            const pendingParticipantDetails = await User.findById(pendingParticipant._id).select(
+              'name profileImageUrl instagramLink verificationStatus bio about'
+            )
+            if (pendingParticipantDetails) {
+              return {
+                _id: pendingParticipantDetails._id,
+                name: pendingParticipantDetails.name,
+                profileImageUrl: pendingParticipantDetails.profileImageUrl,
+                instagramLink: pendingParticipantDetails.instagramLink,
+                verificationStatus: pendingParticipantDetails.verificationStatus,
+                bio: pendingParticipantDetails.bio,
+                about: pendingParticipantDetails.about,
+              }
+            }
+            return null
+          })
+        )
+
         return {
           ...event.toObject(),
           startDate: formatDate(new Date(event.startDate)),
@@ -131,6 +151,7 @@ export async function GET(req, { params }) {
           endTime: formatTime(new Date(event.endDate)),
           organizer: organizerDetails,
           participants: participantsDetails.filter((p) => p !== null), 
+          pendingParticipants: pendingParticipantsDetails.filter((p) => p !== null), 
         }
       })
     )
