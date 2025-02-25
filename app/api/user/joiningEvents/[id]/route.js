@@ -62,8 +62,10 @@
 //   }
 // }
 
+
 import { NextResponse } from 'next/server'
 import Event from '../../../../../models/Event'
+import User from '../../../../../models/User'
 
 // Helper functions for formatting date and time
 const formatDate = (date) => (date ? date.toISOString().split('T')[0] : null)
@@ -76,28 +78,69 @@ export async function GET(req, { params }) {
   const { id } = params
 
   try {
-    // Fetch events the user has joined and populate participants + organizer in one query
+    // Fetch events the user has joined
     const joiningEvents = await Event.find({ 'participants._id': id })
-    .populate({
-      path: 'participants._id',
-      select: 'name profileImageUrl instagramLink verificationStatus bio about',
-    })
-    .populate({
-      path: 'organizer',
-      select: 'name profileImageUrl instagramLink verificationStatus bio about',
-    })
 
-    // Format events
-    const formattedEvents = joiningEvents.map(event => ({
-      ...event.toObject(),
-      startDate: formatDate(event.startDate),
-      endDate: formatDate(event.endDate),
-      startTime: formatTime(event.startDate),
-      endTime: formatTime(event.endDate),
-    }))
+    // Format events, retrieve organizer and participants' details
+    const formattedEvents = await Promise.all(
+      joiningEvents.map(async (event) => {
+        // Fetch organizer details
+        let organizerDetails = null
+        if (event.organizer) {
+          const organizer = await User.findById(event.organizer).select(
+            'name profileImageUrl instagramLink verificationStatus bio about'
+          )
+          if (organizer) {
+            organizerDetails = {
+              _id: organizer._id,
+              name: organizer.name,
+              profileImageUrl: organizer.profileImageUrl,
+              instagramLink: organizer.instagramLink,
+              verificationStatus: organizer.verificationStatus,
+              bio: organizer.bio,
+              about: organizer.about,
+            }
+          }
+        }
+
+        // Fetch participants' details
+        const participantsDetails = await Promise.all(
+          event.participants.map(async (participant) => {
+            const participantDetails = await User.findById(participant._id).select(
+              'name profileImageUrl instagramLink verificationStatus bio about'
+            )
+            if (participantDetails) {
+              return {
+                _id: participantDetails._id,
+                name: participantDetails.name,
+                profileImageUrl: participantDetails.profileImageUrl,
+                instagramLink: participantDetails.instagramLink,
+                verificationStatus: participantDetails.verificationStatus,
+                bio: participantDetails.bio,
+                about: participantDetails.about,
+              }
+            }
+            return null
+          })
+        )
+
+        return {
+          ...event.toObject(),
+          startDate: formatDate(new Date(event.startDate)),
+          endDate: formatDate(new Date(event.endDate)),
+          startTime: formatTime(new Date(event.startDate)),
+          endTime: formatTime(new Date(event.endDate)),
+          organizer: organizerDetails,
+          participants: participantsDetails.filter((p) => p !== null), // Ensure no null values
+        }
+      })
+    )
 
     return NextResponse.json(
-      { success: true, message: formattedEvents },
+      {
+        success: true,
+        message: formattedEvents,
+      },
       { status: 200 }
     )
   } catch (error) {
