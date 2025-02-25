@@ -77,7 +77,7 @@ export async function GET(req, { params }) {
 
   try {
     // Fetch events the user has joined and populate participants + organizer in one query
-    const joiningEvents = await Event.find({ 'participants': id })
+    const joiningEvents = await Event.find({ 'participants._id': id })
     .populate({
       path: 'participants',
       select: '_id name profileImageUrl instagramLink verificationStatus bio about'
